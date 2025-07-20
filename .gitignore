@@ -1,0 +1,17 @@
+# ビルド成果物
+breakout
+*.exe
+
+# Go モジュールキャッシュ
+go.sum
+
+# エディタ一時ファイル
+.vscode/
+.idea/
+*~
+*.swp
+*.swo
+
+# OS固有ファイル
+.DS_Store
+Thumbs.db
