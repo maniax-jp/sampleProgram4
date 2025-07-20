@@ -1,0 +1,22 @@
+# ビルド成果物
+breakout
+*.exe
+
+# WASM ビルド成果物（docsディレクトリは GitHub Pages のためコミット対象）
+# docs/breakout.wasm
+# docs/wasm_exec.js  
+# docs/index.html
+
+# Go モジュールキャッシュ（go.sumはコミット推奨のためコメントアウト）
+# go.sum
+
+# エディタ一時ファイル
+.vscode/
+.idea/
+*~
+*.swp
+*.swo
+
+# OS固有ファイル
+.DS_Store
+Thumbs.db
