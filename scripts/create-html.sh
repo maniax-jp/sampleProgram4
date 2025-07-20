@@ -1,0 +1,127 @@
+#!/bin/bash
+
+# Script to create index.html for WASM deployment
+
+DOCS_DIR=${1:-docs}
+
+cat > "${DOCS_DIR}/index.html" << 'EOF'
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Go Breakout Game</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 20px;
+            background-color: #222;
+            color: white;
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        
+        #gameContainer {
+            text-align: center;
+            margin: 20px 0;
+        }
+        
+        canvas {
+            border: 2px solid #555;
+            background-color: #000;
+        }
+        
+        .controls {
+            margin: 20px 0;
+            padding: 15px;
+            background-color: #333;
+            border-radius: 8px;
+            max-width: 640px;
+        }
+        
+        .controls h3 {
+            margin-top: 0;
+            color: #4CAF50;
+        }
+        
+        .control-item {
+            margin: 8px 0;
+        }
+        
+        .key {
+            background-color: #555;
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-family: monospace;
+            font-weight: bold;
+        }
+        
+        #loading {
+            font-size: 18px;
+            color: #4CAF50;
+        }
+        
+        #error {
+            color: #f44336;
+            margin: 20px 0;
+        }
+    </style>
+</head>
+<body>
+    <h1>🎮 Go Breakout Game</h1>
+    <p>Classic Breakout game implemented in Go, compiled to WebAssembly</p>
+    
+    <div id="loading">Loading game...</div>
+    <div id="error" style="display: none;"></div>
+    
+    <div id="gameContainer">
+        <canvas id="canvas" width="640" height="480" style="display: none;"></canvas>
+    </div>
+    
+    <div class="controls">
+        <h3>🎯 Game Controls</h3>
+        <div class="control-item"><span class="key">←</span> <span class="key">→</span> Move paddle left/right</div>
+        <div class="control-item"><span class="key">Space</span> Restart game (after game over/win)</div>
+    </div>
+    
+    <div class="controls">
+        <h3>📋 How to Play</h3>
+        <div class="control-item">• Use arrow keys to move the paddle</div>
+        <div class="control-item">• Bounce the ball to destroy all colored blocks</div>
+        <div class="control-item">• Each block destroyed gives you 10 points</div>
+        <div class="control-item">• Don't let the ball fall to the bottom!</div>
+        <div class="control-item">• Destroy all 72 blocks to win</div>
+    </div>
+
+    <script src="wasm_exec.js"></script>
+    <script>
+        const go = new Go();
+        
+        async function loadGame() {
+            try {
+                const result = await WebAssembly.instantiateStreaming(fetch("breakout.wasm"), go.importObject);
+                
+                // Hide loading message and show canvas
+                document.getElementById('loading').style.display = 'none';
+                document.getElementById('canvas').style.display = 'block';
+                
+                // Run the Go program
+                go.run(result.instance);
+            } catch (err) {
+                console.error('Failed to load WASM:', err);
+                document.getElementById('loading').style.display = 'none';
+                document.getElementById('error').style.display = 'block';
+                document.getElementById('error').textContent = 'Failed to load game: ' + err.message;
+            }
+        }
+        
+        // Load the game when page is ready
+        loadGame();
+    </script>
+</body>
+</html>
+EOF
+
+echo "Created ${DOCS_DIR}/index.html"

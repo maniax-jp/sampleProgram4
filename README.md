@@ -11,6 +11,11 @@ Go言語で実装されたブロック崩し（Breakout）ゲームです。ebit
 - **スコア管理**: ブロック破壊時のスコア加算
 - **ゲーム状態**: ゲームオーバー/勝利条件の判定
 
+### 対応プラットフォーム
+- **デスクトップ**: Windows、Linux、macOS対応
+- **ブラウザ**: WebAssembly（WASM）でブラウザ実行対応
+- **モバイル**: タッチ操作対応（WASM版）
+
 ### ゲームルール
 - 左右矢印キーでパドルを操作
 - ボールをパドルで跳ね返し、すべてのブロックを破壊する
@@ -20,22 +25,62 @@ Go言語で実装されたブロック崩し（Breakout）ゲームです。ebit
 
 ## ビルド方法
 
-### 必要な依存関係（Linux）
+### デスクトップ版
+
+#### 必要な依存関係（Linux）
 ```bash
 sudo apt-get update
 sudo apt-get install -y libx11-dev libxrandr-dev libxinerama-dev libxcursor-dev libxi-dev libgl1-mesa-dev libxxf86vm-dev
 ```
 
-### ビルド
+> **注意**: サーバー環境やCI環境では、デスクトップ版のビルドに必要なX11ライブラリが利用できない場合があります。その場合はWASM版をご利用ください。
+
+#### ビルド
 ```bash
+# Makefileを使用
+make build
+
+# または直接ビルド
 go build -o breakout main.go
 ```
 
+### WASM版（ブラウザ対応）
+
+#### WASM ビルド
+```bash
+# 完全なWASMビルド（HTML含む）
+make wasm-full
+
+# WASMファイルのみビルド
+make wasm
+```
+
+#### ローカルテスト
+```bash
+# ローカルサーバーで実行（自動でブラウザ用サーバーを起動）
+make serve
+# http://localhost:8080 でアクセス可能
+```
+
+#### GitHub Pages デプロイ
+1. リポジトリの Settings > Pages で GitHub Pages を有効化
+2. Source を "GitHub Actions" に設定
+3. main ブランチにプッシュすると自動デプロイ
+
 ## 実行方法
 
+### デスクトップ版
 ```bash
+# ビルド後に実行
 ./breakout
+
+# または直接実行
+make run
 ```
+
+### WASM版
+- GitHub Pages: `https://username.github.io/repository-name/`
+- ローカル: `make serve` 後に `http://localhost:8080`
 
 ## 開発環境
 
