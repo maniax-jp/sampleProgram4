@@ -79,7 +79,7 @@ make run
 ```
 
 ### WASM版
-- GitHub Pages: `https://username.github.io/repository-name/`
+- GitHub Pages: [https://maniax-jp.github.io/sampleProgram4/](https://maniax-jp.github.io/sampleProgram4/)
 - ローカル: `make serve` 後に `http://localhost:8080`
 
 ## 開発環境
